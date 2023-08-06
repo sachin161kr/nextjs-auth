@@ -17,6 +17,8 @@ export default function LoginPage() {
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (user.email.length > 0 && user.password.length > 0) {
       setButtonDisabled(false);
@@ -27,19 +29,22 @@ export default function LoginPage() {
 
   const onLogin = async () => {
     try {
+      setLoading(true);
       const response = await axios.post("api/users/login", user);
+      setLoading(false);
       console.log(response);
       toast.success("Login Successful");
       router.push("/profile");
     } catch (error) {
       console.log("Something went wrong", error);
       toast.error("Login Failed");
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>Login</h1>
+      <h1>{loading === true ? "loading" : "Login"}</h1>
       <hr />
 
       <label htmlFor="email">email</label>

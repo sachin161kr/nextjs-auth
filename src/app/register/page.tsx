@@ -17,6 +17,8 @@ export default function SignupPage() {
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (
       user.email.length > 0 &&
@@ -31,17 +33,20 @@ export default function SignupPage() {
 
   const onSignUp = async () => {
     try {
+      setLoading(true);
       const response = await axios.post("/api/users/signup", user);
+      setLoading(false);
       console.log(response.data);
       router.push("/login");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>Signup</h1>
+      <h1>{loading === true ? "loading" : "Signup"}</h1>
       <hr />
       <label htmlFor="username">username</label>
       <input
